@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.mobi.sactrack.satrack.Activities.MainActivity;
-import com.mobi.sactrack.satrack.Models.result;
+import com.mobi.sactrack.satrack.Models.UserPojo;
 import com.mobi.sactrack.satrack.Networking.HttpService;
 import com.mobi.sactrack.satrack.Networking.Service;
 
@@ -106,13 +106,13 @@ public class MainActivityTest {
 
 
         okhttp3.Response okHttp = buildResponse(200, "", null);
-        final Response<List<result>> response = Response.success(null, okHttp);
+        final Response<List<UserPojo>> response = Response.success(null, okHttp);
 
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Callback<List<result>> call =
-                        (Callback<List<result>>) invocation.getArguments()[0];
+                Callback<List<UserPojo>> call =
+                        (Callback<List<UserPojo>>) invocation.getArguments()[0];
                 call.onResponse(null, response);
                 return null;
             }

@@ -3,6 +3,7 @@ package com.mobi.sactrack.satrack.Activities;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,15 +12,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mobi.sactrack.satrack.Models.User;
-import com.mobi.sactrack.satrack.Models.result;
+import com.mobi.sactrack.satrack.Models.UserPojo;
 import com.mobi.sactrack.satrack.Networking.HttpService;
 import com.mobi.sactrack.satrack.Networking.Service;
 import com.mobi.sactrack.satrack.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmList;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,19 +67,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void getUsers() {
         Service retrofit = new Service();
         HttpService service = retrofit.createService(HttpService.class, "");
-        Call<ArrayList<result>> user = service.getUsers();
+        Call<ArrayList<UserPojo>> user = service.getUsers();
 
         user.enqueue(
-                new Callback<ArrayList<result>>() {
+                new Callback<ArrayList<UserPojo>>() {
                     @Override
-                    public void onResponse(Call<ArrayList<result>> call, Response<ArrayList<result>> response) {
+                    public void onResponse(Call<ArrayList<UserPojo>> call, Response<ArrayList<UserPojo>> response) {
                         if (response.isSuccessful()) {
                             addUser(response);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ArrayList<result>> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<UserPojo>> call, Throwable t) {
                         Log.e(TAG, " get failed " + t);
                     }
                 });
@@ -85,10 +90,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      *
      * @param response cuerpod e la peticion
      */
-    public void addUser(Response<ArrayList<result>> response) {
+    public void addUser(Response<ArrayList<UserPojo>> response) {
         if (!response.body().isEmpty()) {
             ArrayList<User> data = (ArrayList<User>) response.body().clone();
-            Realm realdb =
+            Realm realm =
                     Realm.getInstance(
                             new RealmConfiguration.Builder(getApplicationContext())
                                     .name("strack.realm")
@@ -96,16 +101,34 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     );
 
             for (int i = 0; i < data.size(); i++) {
-                User user = realdb.createObject(User.class);
+                User user = realm.createObject(User.class);
                 user.setId(user.getId());
                 user.setNombre(user.getNombre());
                 user.setUsuario(user.getUsuario());
             }
-            realdb.commitTransaction();
+            realm.commitTransaction();
 
         } else {
             Log.e(TAG, "sind atos ");
         }
+    }
+
+    /**
+     * Retorna todos los datos de los usuarios
+     */
+    public List<User> getAllUser(List<User> user) {
+        Realm realm =
+                Realm.getInstance(
+                        new RealmConfiguration.Builder(getApplicationContext())
+                                .name("strack.realm")
+                                .build()
+                );
+        RealmQuery query = realm.where(User.class);
+        RealmResults results = query.findAll();
+        for (int i = 0; i < results.size(); i++) {
+            user.add((User) results.get(i));
+        }
+        return user;
     }
 
 }

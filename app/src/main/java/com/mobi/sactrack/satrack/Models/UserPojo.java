@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.HashMap;
 import java.util.Map;
 
-public class result {
+public class UserPojo {
 
     @SerializedName("Id")
     private String id;
