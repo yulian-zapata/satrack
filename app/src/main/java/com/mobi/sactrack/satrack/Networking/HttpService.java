@@ -1,6 +1,8 @@
 package com.mobi.sactrack.satrack.Networking;
 
-import com.mobi.sactrack.satrack.Models.Users;
+import com.mobi.sactrack.satrack.Models.result;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,7 +14,7 @@ import retrofit2.http.GET;
 public interface HttpService {
 
     @GET("GET-api-Usuarios")
-    Call<Users> getUsers(
+    Call<ArrayList<result>> getUsers(
     );
 
 }

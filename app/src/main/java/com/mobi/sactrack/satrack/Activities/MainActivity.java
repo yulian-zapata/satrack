@@ -1,8 +1,7 @@
 package com.mobi.sactrack.satrack.Activities;
 
-import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -11,19 +10,22 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.mobi.sactrack.satrack.Models.Users;
+import com.mobi.sactrack.satrack.Models.User;
+import com.mobi.sactrack.satrack.Models.result;
 import com.mobi.sactrack.satrack.Networking.HttpService;
 import com.mobi.sactrack.satrack.Networking.Service;
 import com.mobi.sactrack.satrack.R;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * actividad principal
+ * actividad principal con el mapa
  */
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -40,9 +42,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
-
     /**
      * Se encarga de inicializar el mapa
+     *
      * @param googleMap
      */
     @Override
@@ -54,26 +56,25 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
     /**
      * Se encarga de traer todos los usuarios
-     *
      */
     public void getUsers() {
         Service retrofit = new Service();
         HttpService service = retrofit.createService(HttpService.class, "");
-        Call<Users> user = service.getUsers();
+        Call<ArrayList<result>> user = service.getUsers();
 
         user.enqueue(
-                new Callback<Users>() {
+                new Callback<ArrayList<result>>() {
                     @Override
-                    public void onResponse(Call<Users> call, Response<Users> response) {
+                    public void onResponse(Call<ArrayList<result>> call, Response<ArrayList<result>> response) {
                         if (response.isSuccessful()) {
                             addUser(response);
                         }
                     }
+
                     @Override
-                    public void onFailure(Call<Users> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<result>> call, Throwable t) {
                         Log.e(TAG, " get failed " + t);
                     }
                 });
@@ -81,11 +82,30 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Permite agregar usuarios a la db
+     *
      * @param response cuerpod e la peticion
      */
-    public void addUser(Response<Users> response) {
-        // TODO : AGREGAR USUARIOS A LA DB SQLITE
-        Log.e(TAG, " get users " );
+    public void addUser(Response<ArrayList<result>> response) {
+        if (!response.body().isEmpty()) {
+            ArrayList<User> data = (ArrayList<User>) response.body().clone();
+            Realm realdb =
+                    Realm.getInstance(
+                            new RealmConfiguration.Builder(getApplicationContext())
+                                    .name("strack.realm")
+                                    .build()
+                    );
+
+            for (int i = 0; i < data.size(); i++) {
+                User user = realdb.createObject(User.class);
+                user.setId(user.getId());
+                user.setNombre(user.getNombre());
+                user.setUsuario(user.getUsuario());
+            }
+            realdb.commitTransaction();
+
+        } else {
+            Log.e(TAG, "sind atos ");
+        }
     }
 
 }

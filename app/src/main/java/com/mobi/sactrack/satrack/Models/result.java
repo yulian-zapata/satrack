@@ -1,16 +1,15 @@
 package com.mobi.sactrack.satrack.Models;
 
 /**
- * Created by mobico on 25/08/16.
+ * Modelo para trabajar con retrofit
  */
 
-import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Users {
+public class result {
 
     @SerializedName("Id")
     private String id;
@@ -70,5 +69,4 @@ public class Users {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
 }
