@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+apply plugin: 'net.saliman.cobertura'
+
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "com.mobi.sactrack.satrack"
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+    testOptions {
+        unitTests.all {
+            jvmArgs '-XX:MaxPermSize=1024m'
+            //prevent OOM (PermGen space) while running tests
+        }
+    }
+}
+
+cobertura {
+    coverageFormats = ['html']
+    coverageIgnoreTrivial = true
+    coverageSourceDirs = ['src/main/java']
+    coverageIncludes = ['.*co.mobico.sorteos.Activities.*']
+
+    coverageReportDir = new File("$buildDir/reports/cobertura")
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.easymock:easymock:3.4'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.powermock:powermock-api-mockito:1.6.4'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.4'
+    testCompile 'org.powermock:powermock-module-test-easymock-junit4:1.6.5'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.google.android.gms:play-services:9.4.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.1'
+
+}
