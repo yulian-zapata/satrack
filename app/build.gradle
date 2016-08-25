@@ -56,4 +56,6 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     compile 'io.realm:realm-android:0.84.1'
+    compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
 }
