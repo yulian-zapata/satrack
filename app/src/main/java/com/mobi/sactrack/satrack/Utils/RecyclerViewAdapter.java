@@ -8,20 +8,18 @@ import android.widget.TextView;
 
 import com.mobi.sactrack.satrack.Models.User;
 import com.mobi.sactrack.satrack.R;
-import com.mobi.sactrack.satrack.Utils.DummyContent.DummyItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * TODO: Replace the implementation with code for your data type.
+ * adaptador para mostrar datos desde la db
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-      List<User> mValues;
+      List<User> values;
 
     public RecyclerViewAdapter(List<User> items) {
-        mValues = items;
+        values = items;
     }
 
 
@@ -34,14 +32,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getId());
-        holder.mContentView.setText(mValues.get(position).getNombre());
+        holder.mItem = values.get(position);
+        holder.mIdView.setText(values.get(position).getId());
+        holder.mContentView.setText(values.get(position).getNombre());
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return values.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
