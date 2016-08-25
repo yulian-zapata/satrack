@@ -69,16 +69,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onResponse(Call<Users> call, Response<Users> response) {
                         if (response.isSuccessful()) {
-                            // TODO : AGREGAR USUARIOS A LA DB SQLITE
-                            Log.i(TAG, ""+response.body());
+                            addUser(response);
                         }
                     }
-
                     @Override
                     public void onFailure(Call<Users> call, Throwable t) {
                         Log.e(TAG, " get failed " + t);
                     }
                 });
+    }
+
+    /**
+     * Permite agregar usuarios a la db
+     * @param response cuerpod e la peticion
+     */
+    public void addUser(Response<Users> response) {
+        // TODO : AGREGAR USUARIOS A LA DB SQLITE
+        Log.e(TAG, " get users " );
     }
 
 }
