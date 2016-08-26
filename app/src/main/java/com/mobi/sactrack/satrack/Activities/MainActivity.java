@@ -3,7 +3,6 @@ package com.mobi.sactrack.satrack.Activities;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,7 +21,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmList;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -34,8 +32,8 @@ import retrofit2.Response;
  */
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap map;
     public static final String TAG = MainActivity.class.getSimpleName();
+    private GoogleMap map;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,7 +107,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             realm.commitTransaction();
 
         } else {
-            Log.e(TAG, "sind atos ");
+            Log.e(TAG, "sin datos ");
         }
     }
 

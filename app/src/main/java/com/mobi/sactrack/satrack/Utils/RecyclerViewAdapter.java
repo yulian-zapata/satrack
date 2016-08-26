@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-      List<User> values;
+    List<User> values;
 
     public RecyclerViewAdapter(List<User> items) {
         values = items;

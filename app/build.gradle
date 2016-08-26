@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'net.saliman.cobertura'
-
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 24
@@ -20,15 +20,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
-    testOptions {
-        unitTests.all {
-            jvmArgs '-XX:MaxPermSize=1024m'
-            //prevent OOM (PermGen space) while running tests
         }
     }
 }
@@ -55,7 +46,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
-    compile 'io.realm:realm-android:0.84.1'
     compile 'com.android.support:support-v4:24.2.0'
     compile 'com.android.support:recyclerview-v7:24.2.0'
 }

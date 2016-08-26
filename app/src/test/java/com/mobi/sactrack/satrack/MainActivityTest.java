@@ -2,7 +2,6 @@ package com.mobi.sactrack.satrack;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -40,7 +39,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.expectNiceNew;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
@@ -51,12 +49,9 @@ import static org.powermock.api.mockito.PowerMockito.whenNew;
 @PrepareForTest({MainActivity.class, GoogleMap.class})
 public class MainActivityTest {
     MainActivity spyActivity;
-    Toolbar toolbar;
     Call call;
     Service service;
     HttpService httpService;
-
-
 
     @Before
     public void setup() throws Exception {
@@ -74,7 +69,7 @@ public class MainActivityTest {
     public void testOnCreate() {
         Method[] appCompatActivityOnCreateMethods =
                 PowerMockito.methods(AppCompatActivity.class, "onCreate");
-        android.support.v4.app.FragmentManager fragment  = mock(android.support.v4.app.FragmentManager.class);
+        android.support.v4.app.FragmentManager fragment = mock(android.support.v4.app.FragmentManager.class);
         SupportMapFragment supportMapFragment = mock(SupportMapFragment.class);
         PowerMockito.suppress(appCompatActivityOnCreateMethods);
         doNothing().when(spyActivity).setContentView(anyInt());
@@ -91,23 +86,25 @@ public class MainActivityTest {
      * valdiad el llamado
      */
     @Test(expected = java.lang.AssertionError.class)
-    public void testOnMapReady(){
+    public void testOnMapReady() {
         GoogleMap googleMap = createMock(GoogleMap.class);
         replay(googleMap);
         spyActivity.onMapReady(googleMap);
     }
 
-
+    /**
+     * verifica el llamado de addUser
+     *
+     * @throws Exception
+     */
     @Test
     public void testOnSuccess200() throws Exception {
         whenNew(Service.class).withNoArguments().thenReturn(service);
         when(service.createService(any(Class.class), anyString())).thenReturn(httpService);
         when(httpService.getUsers()).thenReturn(call);
-
-
+        doNothing().when(spyActivity).addUser(any(Response.class));
         okhttp3.Response okHttp = buildResponse(200, "", null);
         final Response<List<UserPojo>> response = Response.success(null, okHttp);
-
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -117,6 +114,7 @@ public class MainActivityTest {
                 return null;
             }
         }).when(call).enqueue(any(Callback.class));
+
         spyActivity.getUsers();
 
         verify(spyActivity, Mockito.times(1)).addUser(any(Response.class));
